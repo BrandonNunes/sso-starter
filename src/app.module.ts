@@ -10,6 +10,8 @@ import { GrupoModule } from './app/grupo/grupo.module';
 import { PermissoesModule } from './app/permissoes/permissoes.module';
 import {GrupoModel} from "./app/grupo/entities/grupo.entity";
 import {PermissaoModel} from "./app/permissoes/entities/permissoes.entity";
+import { GrupoPermModule } from './app/grupo-perm/grupo-perm.module';
+import {GrupoPermModel} from "./app/grupo-perm/entities/grupo-perm.entity";
 
 const DEFAULT_ADMIN = {
   email: 'admin@admin',
@@ -31,7 +33,7 @@ const authenticate = async (email: string, password: string) => {
       // username: 'root',
       // password: 'root',
       database: 'dev',
-      models: [DominioModel, AppClienteModel, GrupoModel, PermissaoModel],
+      models: [DominioModel, AppClienteModel, GrupoModel, PermissaoModel, GrupoPermModel],
       synchronize: true,
       autoLoadModels: true
     }),
@@ -55,7 +57,7 @@ const authenticate = async (email: string, password: string) => {
                   }
                 }
 
-            }, GrupoModel, PermissaoModel],
+            }, GrupoModel, PermissaoModel, GrupoPermModel],
           },
           auth: {
             authenticate,
@@ -74,6 +76,7 @@ const authenticate = async (email: string, password: string) => {
     AppClienteModule,
     GrupoModule,
     PermissoesModule,
+    GrupoPermModule,
   ],
   controllers: [AppController],
   providers: [AppService],

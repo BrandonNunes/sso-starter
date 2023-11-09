@@ -2,6 +2,8 @@ import {Table, Column, Model, HasMany, ForeignKey, BelongsTo, BelongsToMany} fro
 import {DominioModel} from "../../dominio/entities/dominio.entity";
 import {GrupoPermModel} from "../../grupo-perm/entities/grupo-perm.entity";
 import {GrupoModel} from "../../grupo/entities/grupo.entity";
+import {UsuarioModel} from "../../usuarios/entities/usuario.entity";
+import {UsuarioPermissaoModel} from "../../usuario-permissao/entities/usuario-permissao.entity";
 
 @Table({tableName: 'permissoes', timestamps: false})
 export class PermissaoModel extends Model{
@@ -20,5 +22,8 @@ export class PermissaoModel extends Model{
 
     @BelongsToMany(() => GrupoModel, () => GrupoPermModel)
     grupos: GrupoModel[]
+
+    @BelongsToMany(() => UsuarioModel, () => UsuarioPermissaoModel)
+    usuarios: UsuarioModel[]
 
 }

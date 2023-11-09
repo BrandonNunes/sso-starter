@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AppClienteService } from './app_cliente.service';
+import { AppClienteService } from './aplicacao.service';
 import { CreateAppClienteDto } from './dto/create-app_cliente.dto';
 import { UpdateAppClienteDto } from './dto/update-app_cliente.dto';
 

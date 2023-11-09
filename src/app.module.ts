@@ -1,17 +1,28 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { DominioModule } from './app/dominio/dominio.module';
 import {DominioModel} from "./app/dominio/entities/dominio.entity";
-import { AppClienteModule } from './app/app_cliente/app_cliente.module';
-import {AppClienteModel} from "./app/app_cliente/entities/app_cliente.entity";
+import { AppClienteModule } from './app/aplicacao/aplicacao.module';
+import {AplicacaoModel} from "./app/aplicacao/entities/aplicacao.entity";
 import { GrupoModule } from './app/grupo/grupo.module';
 import { PermissoesModule } from './app/permissoes/permissoes.module';
 import {GrupoModel} from "./app/grupo/entities/grupo.entity";
 import {PermissaoModel} from "./app/permissoes/entities/permissoes.entity";
 import { GrupoPermModule } from './app/grupo-perm/grupo-perm.module';
 import {GrupoPermModel} from "./app/grupo-perm/entities/grupo-perm.entity";
+import {translations} from "./adminDBpanel/translations";
+import { UsuariosModule } from './app/usuarios/usuarios.module';
+import {UsuarioModel} from "./app/usuarios/entities/usuario.entity";
+import { GrupoUsuarioModule } from './app/grupo-usuario/grupo-usuario.module';
+import { UsuarioPermissaoModule } from './app/usuario-permissao/usuario-permissao.module';
+import { AplicacaoUsuarioModule } from './app/aplicacao-usuario/aplicacao-usuario.module';
+import {AplicacaoUsuarioModel} from "./app/aplicacao-usuario/entities/aplicacao-usuario.entity";
+import { GrupoUsuarioModel } from './app/grupo-usuario/entities/grupo-usuario.entity';
+import { UsuarioPermissaoModel } from './app/usuario-permissao/entities/usuario-permissao.entity';
 
 const DEFAULT_ADMIN = {
   email: 'admin@admin',
@@ -33,7 +44,7 @@ const authenticate = async (email: string, password: string) => {
       // username: 'root',
       // password: 'root',
       database: 'dev',
-      models: [DominioModel, AppClienteModel, GrupoModel, PermissaoModel, GrupoPermModel],
+      models: [DominioModel, AplicacaoModel, GrupoModel, PermissaoModel, GrupoPermModel, UsuarioModel, AplicacaoUsuarioModel, GrupoUsuarioModel, UsuarioPermissaoModel],
       synchronize: true,
       autoLoadModels: true
     }),
@@ -45,19 +56,77 @@ const authenticate = async (email: string, password: string) => {
         useFactory: () => ({
           adminJsOptions: {
             rootPath: '/admin',
-            resources: [DominioModel,
+            resources: [
               {
-                resource: AppClienteModel,
+                resource: DominioModel,
                 options: {
                   properties: {
-                    // 'dominioId': {
-                    //   description: "Domínio onde ao qaul a palicação fará parte",
-                    //   propertyKey: 'descricao'
-                    //}
+                    descricao: {
+                      description: "Domínio onde ao qual a aplicação fará parte",
+                      isTitle: true
+                    }
                   }
                 }
 
-            }, GrupoModel, PermissaoModel, GrupoPermModel],
+              },
+              {
+                resource: AplicacaoModel,
+                options: {
+                  properties: {
+                    'dominioId': {
+                      description: "Domínio onde ao qual a aplicação fará parte",
+                    },
+                    nomeApp: {
+                      isTitle: true
+                    }
+                  }
+                }
+
+            },
+              {
+                resource: GrupoModel,
+                options: {
+                  properties: {
+                    descricao: {
+                      isTitle: true
+                    }
+                  }
+                }
+
+              },
+              {
+                resource: PermissaoModel,
+                options: {
+                  properties: {
+                    permissao: {
+                      isTitle: true
+                    }
+                  }
+                }
+
+              }, GrupoPermModel,
+              {
+                resource: UsuarioModel,
+                options: {
+                  properties: {
+                    nome: {
+                      isTitle: true
+                    }
+                  }
+                }
+
+              }, AplicacaoUsuarioModel, GrupoUsuarioModel, UsuarioPermissaoModel],
+            branding: {
+              companyName: 'Area administrativa ',
+              logo: "",
+              withMadeWithLove: false,
+            },
+            locale: {
+              language: 'pt',
+              availableLanguages: ['pt'],
+              localeDetection: true,
+              translations
+            }
           },
           auth: {
             authenticate,
@@ -72,11 +141,19 @@ const authenticate = async (email: string, password: string) => {
         }),
       })
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+      exclude: ['api/*', 'admin/*']
+    }),
     DominioModule,
     AppClienteModule,
     GrupoModule,
     PermissoesModule,
     GrupoPermModule,
+    UsuariosModule,
+    GrupoUsuarioModule,
+    UsuarioPermissaoModule,
+    AplicacaoUsuarioModule,
   ],
   controllers: [AppController],
   providers: [AppService],

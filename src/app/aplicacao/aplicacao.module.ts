@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppClienteService } from './app_cliente.service';
-import { AppClienteController } from './app_cliente.controller';
+import { AppClienteService } from './aplicacao.service';
+import { AppClienteController } from './aplicacao.controller';
 import {SequelizeModule} from "@nestjs/sequelize";
-import {AppClienteModel} from "./entities/app_cliente.entity";
+import {AplicacaoModel} from "./entities/aplicacao.entity";
 import {DominioModel} from "../dominio/entities/dominio.entity";
 
 @Module({
-  imports:[SequelizeModule.forFeature([AppClienteModel, DominioModel])],
+  imports:[SequelizeModule.forFeature([AplicacaoModel, DominioModel])],
   controllers: [AppClienteController],
   providers: [AppClienteService],
 })

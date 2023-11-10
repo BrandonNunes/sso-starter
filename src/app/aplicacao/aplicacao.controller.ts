@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AppClienteService } from './aplicacao.service';
 import { CreateAppClienteDto } from './dto/create-app_cliente.dto';
 import { UpdateAppClienteDto } from './dto/update-app_cliente.dto';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Aplicação')
 @Controller('app-cliente')
 export class AppClienteController {
   constructor(private readonly appClienteService: AppClienteService) {}

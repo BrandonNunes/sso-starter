@@ -1,15 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Put, Param, Delete, Res, HttpException, HttpStatus} from '@nestjs/common';
 import { DominioService } from './dominio.service';
 import { CreateDominioDto } from './dto/create-dominio.dto';
 import { UpdateDominioDto } from './dto/update-dominio.dto';
+import { Response } from 'express'
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Dominio')
 @Controller('dominio')
 export class DominioController {
   constructor(private readonly dominioService: DominioService) {}
 
   @Post()
-  create(@Body() createDominioDto: CreateDominioDto) {
-    return this.dominioService.create(createDominioDto);
+  async create(@Res() response: Response, @Body() createDominioDto: CreateDominioDto) {
+    try {
+      const newDom = await this.dominioService.create(createDominioDto);
+      return response.json({message: 'Registro criado com sucesso.', registro: {...newDom.dataValues}})
+    }catch (erro) {
+      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Falha ao executar o processo', erro})
+    }
+
   }
 
   @Get()
@@ -22,13 +31,27 @@ export class DominioController {
     return this.dominioService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDominioDto: UpdateDominioDto) {
-    return this.dominioService.update(+id, updateDominioDto);
+  @Put(':id')
+  async update(@Res() response: Response, @Param('id') id: string, @Body() updateDominioDto: UpdateDominioDto) {
+    try {
+      const existDom = await this.dominioService.findOne(+id);
+      if (!existDom) return response.status(HttpStatus.NOT_FOUND).json({message: 'Dominio não existe.'})
+      await this.dominioService.update(+id, updateDominioDto);
+      return response.status(HttpStatus.ACCEPTED).json({message: 'Registro atualizado com sucesso.', registro: {...updateDominioDto}})
+    }catch (erro) {
+      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Falha ao executar o processo', erro})
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dominioService.remove(+id);
+  async remove(@Res() response: Response,@Param('id') id: string) {
+    try {
+      const existDom = await this.dominioService.findOne(+id);
+      if (!existDom) return response.status(HttpStatus.NOT_FOUND).json({message: 'Dominio não existe.'})
+      await this.dominioService.remove(+id);
+      return response.status(HttpStatus.ACCEPTED).json({message: 'Registro removido com sucesso.'})
+    }catch (erro) {
+      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Falha ao executar o processo', erro})
+    }
   }
 }

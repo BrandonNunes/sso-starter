@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDominioDto } from './dto/create-dominio.dto';
 import { UpdateDominioDto } from './dto/update-dominio.dto';
+import {InjectModel} from "@nestjs/sequelize";
+import {DominioModel} from "./entities/dominio.entity";
+import {AplicacaoModel} from "../aplicacao/entities/aplicacao.entity";
 
 @Injectable()
 export class DominioService {
+  constructor(
+      @InjectModel(DominioModel) private dominioModel: typeof DominioModel
+  ) {
+  }
   create(createDominioDto: CreateDominioDto) {
-    return 'This action adds a new dominio';
+    return this.dominioModel.create({...createDominioDto})
   }
 
   findAll() {
-    return `This action returns all dominio`;
+    return this.dominioModel.findAll();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} dominio`;
+    return this.dominioModel.findByPk(id, {
+      include: [{
+        model: AplicacaoModel
+      }]
+    });
   }
 
   update(id: number, updateDominioDto: UpdateDominioDto) {
-    return `This action updates a #${id} dominio`;
+    return this.dominioModel.update(updateDominioDto, {where: {id}})
   }
 
   remove(id: number) {
-    return `This action removes a #${id} dominio`;
+    return this.dominioModel.destroy({where: {id}})
   }
 }

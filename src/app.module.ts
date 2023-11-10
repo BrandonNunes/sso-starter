@@ -23,6 +23,8 @@ import { AplicacaoUsuarioModule } from './app/aplicacao-usuario/aplicacao-usuari
 import {AplicacaoUsuarioModel} from "./app/aplicacao-usuario/entities/aplicacao-usuario.entity";
 import { GrupoUsuarioModel } from './app/grupo-usuario/entities/grupo-usuario.entity';
 import { UsuarioPermissaoModel } from './app/usuario-permissao/entities/usuario-permissao.entity';
+import { LicencaModule } from './app/licenca/licenca.module';
+import {LicencaModel} from "./app/licenca/entities/licenca.entity";
 
 const DEFAULT_ADMIN = {
   email: 'admin@admin',
@@ -44,7 +46,7 @@ const authenticate = async (email: string, password: string) => {
       // username: 'root',
       // password: 'root',
       database: 'dev',
-      models: [DominioModel, AplicacaoModel, GrupoModel, PermissaoModel, GrupoPermModel, UsuarioModel, AplicacaoUsuarioModel, GrupoUsuarioModel, UsuarioPermissaoModel],
+      models: [DominioModel, AplicacaoModel, GrupoModel, PermissaoModel, GrupoPermModel, UsuarioModel, AplicacaoUsuarioModel, GrupoUsuarioModel, UsuarioPermissaoModel, LicencaModel],
       synchronize: true,
       autoLoadModels: true
     }),
@@ -104,12 +106,23 @@ const authenticate = async (email: string, password: string) => {
                   }
                 }
 
-              }, GrupoPermModel,
+              },
+              GrupoPermModel,
               {
                 resource: UsuarioModel,
                 options: {
                   properties: {
                     nome: {
+                      isTitle: true
+                    }
+                  }
+                }
+              },
+              {
+                resource: LicencaModel,
+                options: {
+                  properties: {
+                    descricao: {
                       isTitle: true
                     }
                   }
@@ -154,6 +167,7 @@ const authenticate = async (email: string, password: string) => {
     GrupoUsuarioModule,
     UsuarioPermissaoModule,
     AplicacaoUsuarioModule,
+    LicencaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

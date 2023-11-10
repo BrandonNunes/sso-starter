@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { GrupoUsuarioService } from './grupo-usuario.service';
 import { CreateGrupoUsuarioDto } from './dto/create-grupo-usuario.dto';
 import { UpdateGrupoUsuarioDto } from './dto/update-grupo-usuario.dto';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Grupo-Usuário')
 @Controller('grupo-usuario')
 export class GrupoUsuarioController {
   constructor(private readonly grupoUsuarioService: GrupoUsuarioService) {}

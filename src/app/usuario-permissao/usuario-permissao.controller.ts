@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsuarioPermissaoService } from './usuario-permissao.service';
 import { CreateUsuarioPermissaoDto } from './dto/create-usuario-permissao.dto';
 import { UpdateUsuarioPermissaoDto } from './dto/update-usuario-permissao.dto';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Usuário-Permissão')
 @Controller('usuario-permissao')
 export class UsuarioPermissaoController {
   constructor(private readonly usuarioPermissaoService: UsuarioPermissaoService) {}

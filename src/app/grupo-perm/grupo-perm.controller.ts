@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { GrupoPermService } from './grupo-perm.service';
 import { CreateGrupoPermDto } from './dto/create-grupo-perm.dto';
 import { UpdateGrupoPermDto } from './dto/update-grupo-perm.dto';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Grupo-Permissão')
 @Controller('grupo-perm')
 export class GrupoPermController {
   constructor(private readonly grupoPermService: GrupoPermService) {}

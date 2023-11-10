@@ -9,6 +9,9 @@ export class DominioModel extends Model {
     @Column({type: DataType.STRING,  })
     descricao: string;
 
+    // @Column
+    // ativo: boolean;
+
     @HasMany(() => AplicacaoModel)
     aplicacoes: AplicacaoModel[]
 

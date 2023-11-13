@@ -7,6 +7,7 @@ import {DominioModule} from "./app/dominio/dominio.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({origin: 'http://localhost:5000'})
   const config = new DocumentBuilder()
       .setTitle('Api SSO')
       .setDescription('Endpoints de acessos e controles de usuarios e aplicações')

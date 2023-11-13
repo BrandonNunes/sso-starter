@@ -26,6 +26,11 @@ export class DominioService {
       }]
     });
   }
+  findOneByDescription(desc: string) {
+    return this.dominioModel.findOne({
+      where: { descricao: desc }
+    });
+  }
 
   update(id: number, updateDominioDto: UpdateDominioDto) {
     return this.dominioModel.update(updateDominioDto, {where: {id}})

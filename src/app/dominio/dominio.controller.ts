@@ -13,6 +13,8 @@ export class DominioController {
   @Post()
   async create(@Res() response: Response, @Body() createDominioDto: CreateDominioDto) {
     try {
+      const existDesc = await this.dominioService.findOneByDescription(createDominioDto.descricao);
+      if (existDesc) return response.status(HttpStatus.CONFLICT).json({message: 'Ja existe um dominio com esta descrição.'});
       const newDom = await this.dominioService.create(createDominioDto);
       return response.json({message: 'Registro criado com sucesso.', registro: {...newDom.dataValues}})
     }catch (erro) {

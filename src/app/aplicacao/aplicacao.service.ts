@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAppClienteDto } from './dto/create-app_cliente.dto';
 import { UpdateAppClienteDto } from './dto/update-app_cliente.dto';
+import {InjectModel} from "@nestjs/sequelize";
+import {AplicacaoModel} from "./entities/aplicacao.entity";
 
 @Injectable()
 export class AppClienteService {
+  constructor(
+      @InjectModel(AplicacaoModel) private aplicacaoModel: typeof AplicacaoModel
+  ) {
+  }
   create(createAppClienteDto: CreateAppClienteDto) {
-    return 'This action adds a new appCliente';
+    return this.aplicacaoModel.create({...createAppClienteDto});
   }
 
   findAll() {
-    return `This action returns all appCliente`;
+    return this.aplicacaoModel.findAll();
+  }
+
+  findAllAppsByDomain(idDomain: number) {
+    return this.aplicacaoModel.findAll({
+      where: {
+        dominioId: idDomain
+      }
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} appCliente`;
+    return this.aplicacaoModel.findByPk(id);
+  }
+  findOneByDesc(desc: string) {
+    return this.aplicacaoModel.findOne({
+      where: { nomeApp: desc }
+    });
   }
 
   update(id: number, updateAppClienteDto: UpdateAppClienteDto) {
-    return `This action updates a #${id} appCliente`;
+    return this.aplicacaoModel.update(updateAppClienteDto, {where: { id }});
   }
 
   remove(id: number) {
-    return `This action removes a #${id} appCliente`;
+    return this.aplicacaoModel.destroy({where: { id }});
   }
 }

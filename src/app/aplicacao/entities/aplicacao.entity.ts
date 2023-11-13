@@ -13,7 +13,7 @@ export class AplicacaoModel extends Model{
     @Column({ allowNull: false })
     nomeApp: string;
 
-    @Column({defaultValue: false})
+    @Column({defaultValue: true})
     ativo: boolean;
 
     @Column({type: DataType.BLOB})

@@ -28,12 +28,19 @@ export class AppClienteController {
   }
 
   @Get('dominio/:idDominio')
-  findAll(@Param('idDominio') idDominio: string) {
-    return this.appClienteService.findAllAppsByDomain(+idDominio);
+  async findAllByDomain(@Res() response: Response, @Param('idDominio') idDominio: string) {
+    try {
+      const existDom = await this.dominioService.findOne(+idDominio);
+      if (!existDom) return response.status(HttpStatus.NOT_FOUND).json({message: 'Dominio informado não existe.'})
+      const apps = await this.appClienteService.findAllAppsByDomain(+idDominio);
+      return response.json(apps);
+    }catch (erro) {
+      return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Falha ao executar o processo', erro})
+    }
   }
 
   @Get()
-  findAllByDomain() {
+  findAll() {
     return this.appClienteService.findAll();
   }
 

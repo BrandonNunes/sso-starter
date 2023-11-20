@@ -3,6 +3,7 @@ import { CreateAppClienteDto } from './dto/create-app_cliente.dto';
 import { UpdateAppClienteDto } from './dto/update-app_cliente.dto';
 import {InjectModel} from "@nestjs/sequelize";
 import {AplicacaoModel} from "./entities/aplicacao.entity";
+import {UsuarioModel} from "../usuarios/entities/usuario.entity";
 
 @Injectable()
 export class AppClienteService {
@@ -27,7 +28,13 @@ export class AppClienteService {
   }
 
   findOne(id: number) {
-    return this.aplicacaoModel.findByPk(id);
+    return this.aplicacaoModel.findByPk(id, {
+      include: [
+        {
+          model: UsuarioModel
+        }
+      ]
+    });
   }
   findOneByDesc(desc: string) {
     return this.aplicacaoModel.findOne({

@@ -6,10 +6,11 @@ import {UsuarioModel} from "./entities/usuario.entity";
 import {DominioModel} from "../dominio/entities/dominio.entity";
 import {GrupoModel} from "../grupo/entities/grupo.entity";
 import {PermissaoModel} from "../permissoes/entities/permissoes.entity";
+import {DominioService} from "../dominio/dominio.service";
 
 @Module({
   imports:[SequelizeModule.forFeature([UsuarioModel, DominioModel, GrupoModel, PermissaoModel])],
   controllers: [UsuariosController],
-  providers: [UsuariosService],
+  providers: [UsuariosService, DominioService],
 })
 export class UsuariosModule {}

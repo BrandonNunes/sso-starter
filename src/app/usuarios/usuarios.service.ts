@@ -32,7 +32,11 @@ export class UsuariosService {
   findOne(id: number) {
     return this.usuarioModel.findByPk(id,
         {
-          include: AplicacaoModel
+          attributes:{exclude: ['senha']},
+          include: [{
+            model: AplicacaoModel,
+            attributes: {exclude: ['logo']}
+          }]
         });
   }
 

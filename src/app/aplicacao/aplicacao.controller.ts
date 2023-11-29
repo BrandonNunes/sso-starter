@@ -40,13 +40,27 @@ export class AppClienteController {
   }
 
   @Get()
-  findAll() {
-    return this.appClienteService.findAll();
+  async findAll() {
+    const apps = await this.appClienteService.findAll();
+    const formatApps = apps.map((app) => {
+      if (app.logo) {
+        return {
+          ...app,
+          logo: app.logo.toString()
+        }
+      }
+      return {
+        ...app
+      }
+    })
+    return formatApps;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.appClienteService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const app = await this.appClienteService.findOne(+id);
+    if (app.logo) app.logo = app.logo.toString();
+    return app;
   }
 
   @Put(':id')

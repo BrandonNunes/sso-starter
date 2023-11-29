@@ -1,4 +1,4 @@
-import {Table, Column, Model, ForeignKey, BelongsTo, DataType, BelongsToMany} from "sequelize-typescript";
+import {Table, Column, Model, ForeignKey, BelongsTo, DataType, BelongsToMany, BeforeFind} from "sequelize-typescript";
 import {DominioModel} from "../../dominio/entities/dominio.entity";
 import {UsuarioModel} from "../../usuarios/entities/usuario.entity";
 import {AplicacaoUsuarioModel} from "../../aplicacao-usuario/entities/aplicacao-usuario.entity";
@@ -33,4 +33,13 @@ export class AplicacaoModel extends Model{
 
     @BelongsToMany(() => UsuarioModel, () => AplicacaoUsuarioModel)
     usuarios: UsuarioModel[]
+
+    @BeforeFind
+    static formatLogo(app: AplicacaoModel) {
+        if (app.logo) {
+            app.logo = app.logo.toString();
+        }else {
+            app.logo = "";
+        }
+    }
 }

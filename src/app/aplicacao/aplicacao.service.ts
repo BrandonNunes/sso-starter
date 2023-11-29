@@ -9,14 +9,13 @@ import {UsuarioModel} from "../usuarios/entities/usuario.entity";
 export class AppClienteService {
   constructor(
       @InjectModel(AplicacaoModel) private aplicacaoModel: typeof AplicacaoModel
-  ) {
-  }
+  ) {}
   create(createAppClienteDto: CreateAppClienteDto) {
     return this.aplicacaoModel.create({...createAppClienteDto});
   }
 
   findAll() {
-    return this.aplicacaoModel.findAll();
+    return this.aplicacaoModel.findAll({raw: true});
   }
 
   findAllAppsByDomain(idDomain: number) {
@@ -29,9 +28,11 @@ export class AppClienteService {
 
   findOne(id: number) {
     return this.aplicacaoModel.findByPk(id, {
+     // raw: true,
       include: [
         {
-          model: UsuarioModel
+          model: UsuarioModel,
+          attributes: {exclude: ['senha']}
         }
       ]
     });

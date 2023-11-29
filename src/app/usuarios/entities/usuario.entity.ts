@@ -37,11 +37,11 @@ export class UsuarioModel extends Model {
     @Column
     dominioId: number;
 
-    @Column({defaultValue: false, field: 'isAdmin'})
+    @Column({defaultValue: false})
     admin: boolean;
 
-    // @Column({defaultValue: false}
-    // ativo: boolean;
+    @Column({defaultValue: true})
+    ativo: boolean;
 
     @BelongsTo(() => DominioModel)
     dominio: DominioModel
